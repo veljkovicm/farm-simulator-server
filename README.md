@@ -7,6 +7,7 @@
  2. Update `PORT` in `.env` file
 
  3. Copy the default TypeORM config file and update the values inside:
+
      `cp ormconfig.example.json ormconfig.json`
 
  4. Install dependencies:
