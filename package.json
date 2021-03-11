@@ -28,6 +28,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "@types/lodash": "^4.14.168",
     "config": "^3.3.6",
+    "lodash": "^4.17.21",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

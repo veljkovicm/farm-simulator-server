@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as _ from 'lodash';
 import {
   Between,
   In,
@@ -56,14 +57,23 @@ export class FarmsService {
 
   @Cron('* * * * * *')
   async handleFarmFeeding(): Promise<void> {
-    const farms = await this.farmsRepository.find();
+    const farms = await this.farmsRepository.find({
+      relations: ['buildings']
+    });
 
-    const farmIds = farms
+    const farmsForFeeding = farms
       .filter((farm) => {
         const secSinceLastFed = (new Date().getTime() - farm.lastFedTime.getTime()) / 1000;
         return secSinceLastFed > config.farmFeedingInterval;
-      })
-      .map(({ id }) => id);
+      });
+
+    const farmIds = farmsForFeeding.map(({ id }) => id);
+
+    // pull only building IDs from farms that are due for feeding
+    const buildingIds = _.flatten(
+      farmsForFeeding
+        .map(({ buildings }) => buildings.map((building) => building.id))
+    );
 
     await this.farmsRepository
       .createQueryBuilder()
@@ -76,7 +86,7 @@ export class FarmsService {
       .createQueryBuilder()
       .update()
       .set({ lastFedTime: new Date(), health: () => "health + ((100 - health) / 2)" })
-      .where({ farmId: In(farmIds), health: Between(0, 100)})
+      .where({ buildingId: In(buildingIds), health: Between(0, 100)})
       .execute()
   }
 }
