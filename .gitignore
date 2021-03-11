@@ -35,3 +35,6 @@ lerna-debug.log*
 
 # TypeORM config file
 /ormconfig.json
+
+# Default config file
+/config/default.json
