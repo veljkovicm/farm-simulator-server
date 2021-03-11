@@ -24,9 +24,7 @@ export class BuildingController {
 
   @Get()
   async getAllFarmBuildings(@Query('id') farmId: string) {
-    const buildings =  await this.buildingService.getBuildings(farmId);
-
-    return _.keyBy(buildings, 'id');
+    return this.buildingService.getBuildings(farmId);
   }
 
   @Get('/units/:id')
