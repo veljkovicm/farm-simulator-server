@@ -1,0 +1,5 @@
+{
+  "farmFeedingInterval": 60,
+  "unitFeedingCountdown": 10,
+  "unitFeedingTimeout": 5
+}

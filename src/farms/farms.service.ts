@@ -3,7 +3,7 @@ import { Farm } from './entities/farm.entity';
 import { Unit } from '../units/entities/unit.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
-import { Cron } from '@nestjs/schedule';
+import * as config from 'config';
 
 @Injectable()
 export class FarmsService {
@@ -55,7 +55,7 @@ export class FarmsService {
     const farmIds = farms
       .filter((farm) => {
         const secSinceLastFed = (new Date().getTime() - farm.lastFedTime.getTime()) / 1000;
-        return secSinceLastFed > 60;
+        return secSinceLastFed > config.farmFeedingInterval;
       })
       .map(({ id }) => id);
 

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Unit } from './entities/unit.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
+import * as config from 'config';
 import { Building } from 'src/buildings/entities/building.entity';
 import { Cron } from '@nestjs/schedule';
 import { FarmUnitStatus } from '../contants';
@@ -50,7 +51,7 @@ export class UnitsService {
 
     const secSinceLastFed = (new Date().getTime() - unit.lastFedTime.getTime()) / 1000;
 
-    if(secSinceLastFed <= 5) {
+    if(secSinceLastFed <= config.unitFeedingTimeout) {
       return { error: 'Units can only be fed once every 5 seconds.'}
     }
 
@@ -67,7 +68,7 @@ export class UnitsService {
     const unitIds = units
       .filter((unit) => {
         const secSinceLastFed = (new Date().getTime() - unit.lastFedTime.getTime()) / 1000;
-        return secSinceLastFed > 10;
+        return secSinceLastFed > config.unitFeedingCountdown;
       })
       .map(({ id }) => id);
 
