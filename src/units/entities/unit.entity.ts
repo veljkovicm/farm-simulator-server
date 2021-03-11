@@ -17,10 +17,6 @@ export class Unit {
   @Column({ name: 'building_id' })
   @ManyToOne(() => Building, (building) => building.units)
   buildingId: string;
-  
-  @Column({ name: 'farm_id' })
-  @ManyToOne(() => Farm, (farm) => farm.units)
-  farmId: string;
 
   @Column()
   name: string;

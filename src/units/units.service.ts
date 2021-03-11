@@ -27,7 +27,6 @@ export class UnitsService {
     const unit = await this.unitsRepository.create({
       buildingId: building.id,
       name: building.farmUnit,
-      farmId: building.farmId,
     });
 
     return this.unitsRepository.save(unit);
