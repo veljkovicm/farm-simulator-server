@@ -21,7 +21,7 @@ export class Building {
   farmId: string;
 
   @Column({ name: 'farm_unit' })
-  farmUnit: string; // add type if we're going to use predefined values for farm units
+  farmUnit: string;
 
   @OneToMany(() => Unit, (unit) => unit.buildingId)
   units: Unit[];

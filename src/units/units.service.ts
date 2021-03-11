@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Unit } from './entities/unit.entity';
+import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
 import * as config from 'config';
-import { Building } from 'src/buildings/entities/building.entity';
-import { Cron } from '@nestjs/schedule';
+import { Unit } from './entities/unit.entity';
 import { FarmUnitStatus } from '../contants';
+import { Building } from 'src/buildings/entities/building.entity';
 
 @Injectable()
 export class UnitsService {
