@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Building } from './entities/building.entity';
+import { Building as BuildingModel } from './buildings.model';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class BuildingService {
     farmId: string,
     name: string,
     farmUnit: string
-  ) {
+  ): Promise<BuildingModel> {
     const building = this.buildingRepository.create({
       farmId,
       name,
@@ -25,7 +26,7 @@ export class BuildingService {
     return this.buildingRepository.save(building);
   }
 
-  async getBuildings(farmId) {
+  async getBuildings(farmId): Promise<Building[]> {
     const farms = await this.buildingRepository.find({
       where: { farmId },
       order: {
@@ -37,7 +38,7 @@ export class BuildingService {
     return farms;
   }
 
-  async getBuildingFarmUnits(buildingId: string) {
+  async getBuildingFarmUnits(buildingId: string): Promise<BuildingModel> {
     const building = await this.buildingRepository.findOne(buildingId, {
       relations: ['units'],
       order: {

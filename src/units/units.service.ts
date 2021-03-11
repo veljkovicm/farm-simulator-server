@@ -10,6 +10,7 @@ import * as config from 'config';
 import { Unit } from './entities/unit.entity';
 import { FarmUnitStatus } from '../contants';
 import { Building } from 'src/buildings/entities/building.entity';
+import { Unit as UnitModel } from './units.model';
 
 @Injectable()
 export class UnitsService {
@@ -20,7 +21,7 @@ export class UnitsService {
     private readonly buildingsRepository: Repository<Building>
   ) {}
 
-  async addUnit(buildingId) {
+  async addUnit(buildingId): Promise<UnitModel> {
     const building = await this.buildingsRepository.findOne(buildingId);
 
     const unit = await this.unitsRepository.create({
@@ -32,7 +33,7 @@ export class UnitsService {
     return this.unitsRepository.save(unit);
   }
 
-  async getUnits(buildingId: string) {
+  async getUnits(buildingId: string): Promise<UnitModel[]> {
     return this.unitsRepository.find({
       where: {buildingId},
       order: {
@@ -41,16 +42,7 @@ export class UnitsService {
     });
   }
 
-  async getSingleProduct(productId: string) {
-    const farm = await this.unitsRepository.findOne(productId);
-
-    if (!farm) {
-      throw new NotFoundException(`Farm ${productId} not found`);
-    }
-    return farm;
-  }
-
-  async feedUnit(id: string) {
+  async feedUnit(id: string): Promise<UnitModel | { error: string }> {
     const unit = await this.unitsRepository.findOne(id);
 
     const secSinceLastFed = (new Date().getTime() - unit.lastFedTime.getTime()) / 1000;
@@ -66,7 +58,7 @@ export class UnitsService {
   }
 
   @Cron('* * * * * *')
-  async handleStarwing() {
+  async handleStarwing(): Promise<void> {
     const units = await this.unitsRepository.find();
 
     const unitIds = units
@@ -84,7 +76,7 @@ export class UnitsService {
       .execute();
 
 
-    return this.unitsRepository
+    await this.unitsRepository
       .createQueryBuilder()
       .update()
       .set({ status: FarmUnitStatus.DEAD })

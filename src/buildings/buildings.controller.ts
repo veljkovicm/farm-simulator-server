@@ -4,10 +4,9 @@ import {
  Post,
  Body,
  Get,
- Param,
  Query,
 } from '@nestjs/common';
-import * as _ from 'lodash';
+import { Building } from './buildings.model';
 
 @Controller('building')
 export class BuildingController {
@@ -15,20 +14,17 @@ export class BuildingController {
 
   @Post()
   async createFarmBuilding(
-    @Body('farmId') farmId: string,
-    @Body('name') name: string,
-    @Body('farmUnit') farmUnit: string
-  ) {
-    return this.buildingService.createFarmBuilding(farmId, name, farmUnit);
+    @Body() building: Building
+  ): Promise<Building> {
+    return this.buildingService.createFarmBuilding(
+      building.farmId,
+      building.name,
+      building.farmUnit,
+    );
   }
 
   @Get()
-  async getAllFarmBuildings(@Query('id') farmId: string) {
+  async getAllFarmBuildings(@Query('id') farmId: string): Promise<Building[]> {
     return this.buildingService.getBuildings(farmId);
-  }
-
-  @Get('/units/:id')
-  async getBuildingUnits(@Param('id') buildingId: string) {
-    return this.buildingService.getBuildingFarmUnits(buildingId);
   }
 }

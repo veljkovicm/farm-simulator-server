@@ -1,6 +1,6 @@
 export interface Farm {
+  name: string;
   id: string;
-  title: string;
-  description: string;
-  price: number;
+  lastFedTime: Date;
+  createdAt: Date;
 }
