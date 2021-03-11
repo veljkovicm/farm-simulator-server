@@ -17,7 +17,7 @@ export class BuildingController {
   async createFarmBuilding(
     @Body('farmId') farmId: string,
     @Body('name') name: string,
-    @Body('farmUnit') farmUnit: string,
+    @Body('farmUnit') farmUnit: string
   ) {
     return this.buildingService.createFarmBuilding(farmId, name, farmUnit);
   }

@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, In, Repository } from 'typeorm';
+import {
+  Between,
+  In,
+  Repository,
+} from 'typeorm';
 import * as config from 'config';
 import { Unit } from './entities/unit.entity';
 import { FarmUnitStatus } from '../contants';
@@ -29,10 +33,10 @@ export class UnitsService {
   }
 
   async getUnits(buildingId: string) {
-    return this.unitsRepository.find({ 
+    return this.unitsRepository.find({
       where: {buildingId},
       order: {
-        createdAt: 'DESC'
+        createdAt: 'DESC',
       },
     });
   }

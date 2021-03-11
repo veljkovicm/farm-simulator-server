@@ -14,7 +14,7 @@ export class BuildingService {
   async createFarmBuilding(
     farmId: string,
     name: string,
-    farmUnit: string,
+    farmUnit: string
   ) {
     const building = this.buildingRepository.create({
       farmId,
